@@ -17,6 +17,7 @@ class ParticipantFactory extends Factory
     public function definition(): array
     {
         return [
+            'key' => fake()->uuid(),
             'name' => fake()->name,
             'color' => fake()->hexColor
         ];

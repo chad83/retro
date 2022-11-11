@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create sessions.
-        $sessions = Session::factory(5)->create();
+        $sessions = Session::factory(20)->create();
 
         foreach ($sessions as $session) {
             // Create participants for each session.

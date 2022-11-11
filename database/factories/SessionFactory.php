@@ -18,7 +18,7 @@ class SessionFactory extends Factory
     {
         return [
             'key' => fake()->uuid(),
-            'state' => fake()->randomElement(['created', 'ready', 'filling', 'revealed'])
+            'state' => fake()->randomElement(['created', 'created', 'ready', 'filling', 'revealed'])
         ];
     }
 }

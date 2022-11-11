@@ -19,6 +19,7 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
+            'key' => fake()->uuid(),
             'category' => fake()->randomElement(['went well', 'can be improved']),
             'text' => fake()->text(60),
             'is_starred' => fake()->randomElement([0, 0, 0, 1]),

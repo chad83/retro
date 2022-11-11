@@ -8,4 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Session extends Model
 {
     use HasFactory;
+
+    protected $attributes = [
+        'state' => 'created'
+    ];
+
+    public function participants(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Participant::class);
+    }
+
+    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
 }

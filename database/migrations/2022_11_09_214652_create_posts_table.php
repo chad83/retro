@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('participant_id');
             $table->unsignedBigInteger('session_id');
             $table->string('category');
-            $table->multiLineString('text');
+            $table->string('text');
             $table->tinyInteger('is_starred');
             $table->unsignedInteger('likes');
             $table->timestamps();

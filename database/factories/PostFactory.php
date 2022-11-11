@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Participant;
+use App\Models\Session;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,10 +16,13 @@ class PostFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            //
+            'category' => fake()->randomElement(['went well', 'can be improved']),
+            'text' => fake()->text(60),
+            'is_starred' => fake()->randomElement([0, 0, 0, 1]),
+            'likes' => fake()->numberBetween(0, 6)
         ];
     }
 }

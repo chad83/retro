@@ -15,14 +15,14 @@ return new class extends Migration
     {
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('session_key');
+            $table->unsignedBigInteger('session_id');
             $table->string('name');
             $table->string('color');
             $table->timestamps();
 
-            $table->foreign('session_key')->references('id')->on('sessions');
+            $table->foreign('session_id')->references('id')->on('sessions');
 
-            $table->index('session_key');
+            $table->index('session_id');
         });
     }
 

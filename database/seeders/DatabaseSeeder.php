@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Participant;
+use App\Models\Post;
 use Illuminate\Database\Seeder;
+use \App\Models\Session;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,13 +15,26 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        // Create sessions.
+        $sessions = Session::factory(5)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        foreach ($sessions as $session) {
+            // Create participants for each session.
+            $participants = Participant::factory()
+                ->for($session)
+                ->count(rand(3, 8))
+                ->create();
+
+            // Create posts per participant per session.
+            foreach ($participants as $participant) {
+                Post::factory()
+                    ->for($participant)
+                    ->for($session)
+                    ->count(rand(4, 10))
+                    ->create();
+            }
+        }
     }
 }

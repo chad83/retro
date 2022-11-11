@@ -23,6 +23,8 @@ Route::prefix('v1')->group(function () {
 
     // Sessions
     Route::prefix('session')->group(function () {
+        Route::get('/{key}', [SessionController::class, 'find']);
+        Route::get('/{key}/participants', [SessionController::class, 'getParticipants']);
     });
 
 });

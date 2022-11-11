@@ -11,6 +11,8 @@ class Participant extends Model
 {
     use HasFactory;
 
+    protected $hidden = ['id', 'session_id', 'created_at', 'updated_at'];
+
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);

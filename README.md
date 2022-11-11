@@ -18,6 +18,12 @@ This project uses Laravel 9 and needs all of its requirements.
 - You have to be in the CLI of the Docker container running the server
     - One way to do that is by clicking the instance in Docker Desktop the pressing the *CLI* button
 
+## Running DB Migrations and Seeders
+
+From the CLI of the Docker container running the server, run:
+- `php artisan migrate`
+- then run `php artisan db:seed`
+
 ## License
 
 Retro is an open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

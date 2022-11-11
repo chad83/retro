@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
+            $table->uuid('key');
             $table->unsignedBigInteger('participant_id');
             $table->unsignedBigInteger('session_id');
             $table->string('category');
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->foreign('participant_id')->references('id')->on('participants');
             $table->foreign('session_id')->references('id')->on('sessions');
 
+            $table->index('key');
             $table->index('category');
             $table->index('participant_id');
             $table->index('session_id');

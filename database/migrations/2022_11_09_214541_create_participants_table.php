@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
+            $table->uuid('key');
             $table->unsignedBigInteger('session_id');
             $table->string('name');
             $table->string('color');
@@ -22,6 +23,7 @@ return new class extends Migration
 
             $table->foreign('session_id')->references('id')->on('sessions');
 
+            $table->index('key');
             $table->index('session_id');
         });
     }

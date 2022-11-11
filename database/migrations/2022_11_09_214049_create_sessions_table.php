@@ -18,6 +18,9 @@ return new class extends Migration
             $table->uuid('key');
             $table->string('state');
             $table->timestamps();
+
+            $table->index('key');
+            $table->index('state');
         });
     }
 

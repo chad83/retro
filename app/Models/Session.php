@@ -9,9 +9,9 @@ class Session extends Model
 {
     use HasFactory;
 
-    protected $attributes = [
-        'state' => 'created'
-    ];
+    protected $fillable = ['state'];
+
+    protected $hidden = ['id', 'created_at', 'updated_at'];
 
     public function participants(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

@@ -23,6 +23,11 @@ Route::prefix('v1')->group(function () {
 
     // Sessions
     Route::prefix('session')->group(function () {
+        Route::post('/', [SessionController::class, 'create']);
+
+        Route::get('/{key}', [SessionController::class, 'find']);
+        Route::get('/{key}/participants', [SessionController::class, 'getParticipants']);
+        Route::get('/{key}/posts', [SessionController::class, 'getPosts']);
     });
 
 });

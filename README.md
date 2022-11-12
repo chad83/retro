@@ -24,6 +24,11 @@ From the CLI of the Docker container running the server, run:
 - `php artisan migrate`
 - then run `php artisan db:seed`
 
+## Links
+
+- [Jira Board](https://chadiw.atlassian.net/jira/software/projects/RET/boards/2)
+- [GitHub Repository](https://github.com/chad83/retro) (This Page :P)
+
 ## License
 
 Retro is an open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

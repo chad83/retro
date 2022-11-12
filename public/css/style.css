@@ -1,0 +1,16 @@
+.vci_container {
+    width: 800px;
+    height: 400px;
+}
+
+.vci_container .vci {
+    width: 100%;
+    height: 100%;
+}
+
+.vci_container .vci textarea {
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    color: #ffffff;
+}

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -15,10 +16,10 @@ return new class extends Migration
     {
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
-            $table->uuid('key');
+            $table->uuid('key')->default(DB::raw('(UUID())'));
             $table->unsignedBigInteger('session_id');
             $table->string('name');
-            $table->string('color');
+            $table->string('color')->nullable();
             $table->timestamps();
 
             $table->foreign('session_id')->references('id')->on('sessions');

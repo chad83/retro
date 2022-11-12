@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -15,8 +16,8 @@ return new class extends Migration
     {
         Schema::create('sessions', function (Blueprint $table) {
             $table->id();
-            $table->uuid('key');
-            $table->string('state');
+            $table->uuid('key')->default(DB::raw('(UUID())'));
+            $table->string('state')->default('created');
             $table->timestamps();
 
             $table->index('key');

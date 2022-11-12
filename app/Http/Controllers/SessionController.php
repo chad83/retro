@@ -19,4 +19,21 @@ class SessionController extends Controller
             ->where('sessions.key', $key)
             ->get();
     }
+
+    public function getPosts(string $key): Collection
+    {
+        return Session::with('posts')
+            ->where('sessions.key', $key)
+            ->get();
+    }
+
+    public function create()
+    {
+        $session = Session::create([
+//            'name' => $request->name
+        ]);
+        $session->save();
+
+        return $session->fresh();
+    }
 }

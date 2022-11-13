@@ -15,6 +15,8 @@ class Post extends Model
         'likes' => 0
     ];
 
+    protected $fillable = ['session_id', 'participant_id', 'category', 'text'];
+
     protected $hidden = ['id', 'session_id', 'participant_id', 'created_at', 'updated_at'];
 
     public function participant(): BelongsTo

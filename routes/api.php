@@ -34,7 +34,7 @@ Route::prefix('v1')->group(function () {
 
     // Participants
     Route::prefix('participant')->group(function () {
-//        Route::post('/', [ParticipantController::class, 'create']);
+        Route::post('/', [ParticipantController::class, 'create']);
 
         Route::get('/{key}', [ParticipantController::class, 'find']);
     });

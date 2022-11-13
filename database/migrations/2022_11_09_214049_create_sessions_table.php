@@ -18,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('key')->default(DB::raw('(UUID())'));
             $table->string('state')->default('created');
+            $table->string('name');
             $table->timestamps();
 
             $table->index('key');

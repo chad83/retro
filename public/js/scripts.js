@@ -7,9 +7,47 @@ jQuery(document).ready(function($){
     let key = jQuery("#key").val();
     let vci = $("#vci_input");
     let vciHelper = $("#vci_helper");
+    let postItColors = ["#ff7eb9", "#7afcff", "#feff9c"];
 
+    function addPostIt(post)
+    {
+        let randomColor = postItColors[Math.floor(Math.random() * postItColors.length)];
 
+        $("#post_it_template")
+            .clone()
+            .css("background-color", randomColor)
+            .removeClass("template")
+            .attr("id", "post_it_" + post.key)
+            .attr("post-key", post.key)
+            .text(post.category + ": " + post.text)
+            .appendTo($("#post_it_container"));
+    }
 
+    function getParticipantPosts()
+    {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: apiPath + "post/getparticipantposts/" + $("#session_key").val() + "/" + $("#participant_key").val(),
+            dataType: "json",
+            success: function (data) {
+
+                data.forEach(function(post){
+                    addPostIt(post);
+                });
+
+                vci.focus();
+            },
+            error: function (data) {
+                console.log('ERROR');
+            }
+        });
+    }
 
     function getParticipants()
     {
@@ -18,11 +56,6 @@ jQuery(document).ready(function($){
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
             }
         });
-        // e.preventDefault();
-        // var formData = {
-        //     // title: jQuery('#title').val(),
-        //     // description: jQuery('#description').val(),
-        // };
 
         $.ajax({
             type: "GET",
@@ -31,6 +64,42 @@ jQuery(document).ready(function($){
             dataType: "json",
             success: function (data) {
                 console.log(data);
+            },
+            error: function (data) {
+                console.log('ERROR');
+            }
+        });
+    }
+
+    function savePost(category, textLine)
+    {
+        if (category !== "went well" && category !== "to improve") {
+            return false;
+        }
+
+        // Get the text from the text line.
+        let text = textLine.substring(textLine.indexOf(" ")).trim();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        // e.preventDefault();
+        let formData = {
+            sessionKey: $("#session_key").val(),
+            participantKey: $("#participant_key").val(),
+            category: category,
+            text: text
+        };
+
+        $.ajax({
+            type: "POST",
+            url: apiPath + "post/",
+            data: formData,
+            dataType: "json",
+            success: function (data) {
+                addPostIt(data);
             },
             error: function (data) {
                 console.log('ERROR');
@@ -74,7 +143,7 @@ jQuery(document).ready(function($){
             lineStart = helperText.lastIndexOf("\n") + 1;
         }
 
-        $("#vci_helper").val(helperText.substring(0, lineStart) + command);
+        vciHelper.val(helperText.substring(0, lineStart) + command);
     }
 
     // Makes sure the cursor is always at the end of the CLI view.
@@ -95,7 +164,7 @@ jQuery(document).ready(function($){
 
     vci.keyup(function (e) {
         let text = $(this).val();
-        let helperText = $("#vci_helper").val();
+        let helperText = vciHelper.val();
         let textLine = getTextLine(text);
         let currentCommand = getCurrentCommand(textLine);
 
@@ -120,7 +189,10 @@ jQuery(document).ready(function($){
             $(this).val(text + "#");
 
             // Skip a line in the helper.
-            $("#vci_helper").val(helperText + "\n");
+            vciHelper.val(helperText + "\n");
+
+            // Attempt to save a post.
+            savePost(currentCommand, textLine);
         }
     });
 
@@ -134,5 +206,6 @@ jQuery(document).ready(function($){
 
 
     vci.focus();
+    getParticipantPosts();
 
 });

@@ -17,6 +17,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/session/{key}', function ($key) {
-    return view('sessions.participantsession', ['key' => $key]);
+Route::get('/session/{sessionKey}/{participantKey}', function ($sessionKey, $participantKey) {
+    return view('sessions.participantsession', [
+        'sessionKey' => $sessionKey,
+        'participantKey' => $participantKey
+    ]);
 });

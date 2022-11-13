@@ -42,6 +42,15 @@ Route::prefix('v1')->group(function () {
     // Posts
     Route::prefix('post')->group(function () {
         Route::post('/', [PostController::class, 'create']);
+
+        Route::get(
+            '/getparticipantposts/{sessionKey}/{participantKey}',
+            [PostController::class, 'getParticipantPosts']
+        );
+
+//        Route::get('/getpostitcolors', function () {
+//            return ['#ff7eb9', '#7afcff', '#feff9c'];
+//        });
     });
 
 });

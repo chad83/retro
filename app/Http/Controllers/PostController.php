@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-
     private ParticipantController $participantController;
 
     public function __construct(ParticipantController $participantController, SessionController $sessionController)
@@ -29,5 +28,19 @@ class PostController extends Controller
         $post->save();
 
         return $post->fresh();
+    }
+
+    public function getParticipantPosts(string $sessionKey, string $participantKey)
+    {
+        return Post::select('posts.*')
+            ->join('sessions', function ($join) use ($sessionKey) {
+                $join->on('sessions.id', 'posts.session_id')->where('sessions.key', $sessionKey);
+            })
+            ->join('participants', function ($join) use ($participantKey) {
+                $join->on('participants.id', 'posts.participant_id')->where('participants.key', $participantKey);
+            })
+            ->orderByDesc('id')
+            ->limit(100)
+            ->get();
     }
 }

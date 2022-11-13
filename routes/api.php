@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ParticipantController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\SessionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +30,18 @@ Route::prefix('v1')->group(function () {
         Route::get('/{key}', [SessionController::class, 'find']);
         Route::get('/{key}/participants', [SessionController::class, 'getParticipants']);
         Route::get('/{key}/posts', [SessionController::class, 'getPosts']);
+    });
+
+    // Participants
+    Route::prefix('participant')->group(function () {
+//        Route::post('/', [ParticipantController::class, 'create']);
+
+        Route::get('/{key}', [ParticipantController::class, 'find']);
+    });
+
+    // Posts
+    Route::prefix('post')->group(function () {
+        Route::post('/', [PostController::class, 'create']);
     });
 
 });

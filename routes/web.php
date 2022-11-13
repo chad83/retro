@@ -18,5 +18,5 @@ Route::get('/', function () {
 });
 
 Route::get('/session/{key}', function ($key) {
-    return view('sessions.main', ['key' => $key]);
+    return view('sessions.participantsession', ['key' => $key]);
 });

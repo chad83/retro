@@ -1,0 +1,42 @@
+.vci_container {
+    width: 800px;
+    height: 400px;
+    margin-top: 40px;
+}
+
+.vci_container .vci {
+    width: 100%;
+    height: 100%;
+}
+
+.vci_container .vci .vci-input,
+.vci_container .vci .vci-helper {
+    height: 100%;
+    background-color: #000000;
+    color: #ffffff;
+    font-family: Cascadia Code, monospace;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    line-height: 16px;
+}
+
+.vci_container .vci .vci-input {
+    width: 80%;
+}
+
+.vci_container .vci .vci-helper {
+    width: 15%;
+    cursor: default;
+}
+
+.code {
+    font-family: Cascadia Code, monospace;
+}
+
+.vci-code-example {
+    padding: 2px 6px;
+    background-color: #000000;
+    color: #ffffff;
+    font-family: Cascadia Code, monospace;
+    font-size: 14px;
+}

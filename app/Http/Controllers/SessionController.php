@@ -27,10 +27,10 @@ class SessionController extends Controller
             ->get();
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $session = Session::create([
-//            'name' => $request->name
+            'name' => $request->name
         ]);
         $session->save();
 

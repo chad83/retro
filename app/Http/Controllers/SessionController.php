@@ -13,11 +13,11 @@ class SessionController extends Controller
         return Session::select(['key', 'state'])->where('key', $key)->first();
     }
 
-    public function getParticipants(string $key): Collection
+    public function getParticipants(string $key): Session
     {
         return Session::with(['participants'])
             ->where('sessions.key', $key)
-            ->get();
+            ->first();
     }
 
     public function getPosts(string $key): Collection

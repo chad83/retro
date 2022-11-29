@@ -63,7 +63,19 @@ jQuery(document).ready(function($){
         $("#create_participant_section").removeClass("hidden");
 
         let sessionLink = window.location.origin + "/participant/" + session['key'] + "/create/";
+
         $("#session_link").html("<a href=\"" + sessionLink + "\">" + sessionLink + "</a>");
+        $("#session_key").val(session['key']);
+
+        updateReadHiddenInputs();
     }
+
+    function createPageHooks()
+    {
+        setInterval(getParticipants, refreshTimeout);
+    }
+
+    // Execute all timed methods.
+    createPageHooks();
 
 });

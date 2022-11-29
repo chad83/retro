@@ -1,10 +1,52 @@
 const apiPath = "/api/v1/";
 const refreshTimeout = 5000;
 
+let sessionKey = "";
+let participantKey = "";
+
+/**
+ * Reloads global variables from hidden fields.
+ */
+function updateReadHiddenInputs()
+{
+    sessionKey = $("#session_key").val();
+    participantKey = $("#participant_key").val();
+}
+
+let tempCurrentParticipants = [];
+function getParticipants()
+{
+    if(sessionKey === "") {
+        return false;
+    }
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: apiPath + "session/" + sessionKey + "/participants",
+        // data: formData,
+        dataType: "json",
+        success: function (session) {
+            session.participants.forEach(function(participant) {
+                // If there are new participants, add them to the participants list and display them.
+                if(!tempCurrentParticipants.includes(participant.key)) {
+                    tempCurrentParticipants.push(participant.key)
+                    $("#participants_list").append("<li>" + participant.name + "</li>");
+                }
+            });
+        },
+        error: function (session) {
+            console.log("ERROR");
+        }
+    });
+}
 
 jQuery(document).ready(function($){
-
-    let key = jQuery("#key").val();
     let vci = $("#vci_input");
     let vciHelper = $("#vci_helper");
     let postItColors = ["#ff7eb9", "#7afcff", "#feff9c"];
@@ -25,6 +67,10 @@ jQuery(document).ready(function($){
 
     function getParticipantPosts()
     {
+        if (sessionKey === "" || participantKey === "") {
+            return false;
+        }
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -33,7 +79,7 @@ jQuery(document).ready(function($){
 
         $.ajax({
             type: "GET",
-            url: apiPath + "post/getparticipantposts/" + $("#session_key").val() + "/" + $("#participant_key").val(),
+            url: apiPath + "post/getparticipantposts/" + sessionKey + "/" + participantKey,
             dataType: "json",
             success: function (data) {
 
@@ -42,28 +88,6 @@ jQuery(document).ready(function($){
                 });
 
                 vci.focus();
-            },
-            error: function (data) {
-                console.log('ERROR');
-            }
-        });
-    }
-
-    function getParticipants()
-    {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            type: "GET",
-            url: apiPath + "session/" + key + "/participants",
-            // data: formData,
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
             },
             error: function (data) {
                 console.log('ERROR');
@@ -205,7 +229,8 @@ jQuery(document).ready(function($){
 
 
 
+    updateReadHiddenInputs();
     vci.focus();
-    getParticipantPosts();
+    getParticipantPosts(); // --TBC-- should it always run?
 
 });

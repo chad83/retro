@@ -4,6 +4,7 @@
 
 <fieldset class="form-container">
     <legend>Create a New Form</legend>
+    <input type="hidden" id="session_key" value="" />
     <div class="two-columns-row">
         <div class="two-columns-cell left"><label for="session_name">Session Name</label></div>
         <div class="two-columns-cell right"><input id="session_name" placeholder="Session Name" /></div>
@@ -22,10 +23,7 @@
     <div class="two-columns-row">
         <div class="two-columns-cell left">Participants</div>
         <div class="two-columns-cell right">
-            <ul>
-                <li>User 1</li>
-                <li>User 2</li>
-            </ul>
+            <ul id="participants_list"></ul>
         </div>
     </div>
     <div class="full-row right"><input type="button" value="Launch Session"></div>

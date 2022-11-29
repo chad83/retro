@@ -1,3 +1,57 @@
+input[type="button"] {
+    background-color: #fff;
+    border: 1px solid #000;
+    border-right: 2px solid;
+    border-bottom: 2px solid;
+    padding: 2px 12px;
+    min-width: 120px;
+}
+
+.head-title {
+    font-family: monospace;
+    font-size: 64px;
+    letter-spacing: 20px;
+    margin-bottom: 40px;
+}
+
+.form-container {
+    width: 800px;
+    padding: 12px 16px;
+    border: solid 1px #dddddd;
+    margin-bottom: 40px;
+}
+
+.two-columns-row {
+    width: 100%;
+}
+
+.two-columns-row .two-columns-cell {
+    display: inline-block;
+    width: 45%;
+    height: 100%;
+    vertical-align: top;
+}
+
+.two-columns-row .two-columns-cell.left {
+    margin-right: 24px;
+    text-align: right;
+}
+
+.two-columns-row .two-columns-cell input{
+    border: solid 1px #cccccc;
+}
+
+.two-columns-row .two-columns-cell ul {
+    margin: 2px;
+    padding: 0 0 0 12px;
+}
+
+.full-row {}
+
+.full-row.right {
+    text-align: right;
+}
+
 .vci_container {
     width: 800px;
     height: 400px;
@@ -70,5 +124,9 @@
 /*}*/
 
 .template {
+    display: none;
+}
+
+.hidden {
     display: none;
 }

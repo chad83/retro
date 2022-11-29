@@ -17,9 +17,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/session/{sessionKey}/{participantKey}', function ($sessionKey, $participantKey) {
-    return view('sessions.participantsession', [
-        'sessionKey' => $sessionKey,
-        'participantKey' => $participantKey
-    ]);
+Route::prefix('session')->group(function () {
+    Route::get('/create', function () {
+        return view('sessions.create', ['showCreateJs' => 1]);
+    });
+
+    Route::get('/{sessionKey}/{participantKey}', function ($sessionKey, $participantKey) {
+        return view('sessions.participantsession', [
+            'sessionKey' => $sessionKey,
+            'participantKey' => $participantKey
+        ]);
+    });
+});
+
+Route::prefix('participant')->group(function () {
+    Route::get('/{sessionKey}/create', function ($sessionKey) {
+        return view('sessions.createparticipant', ['sessionKey' => $sessionKey]);
+    });
 });

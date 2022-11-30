@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 Route::prefix('session')->group(function () {
     Route::get('/create', function () {
-        return view('sessions.create', ['showCreateJs' => 1]);
+        return view('sessions.create', ['showCreateJs' => 1, 'showParticipantJs' => 1]);
     });
 
     Route::get('/{sessionKey}/{participantKey}', function ($sessionKey, $participantKey) {
@@ -32,6 +32,6 @@ Route::prefix('session')->group(function () {
 
 Route::prefix('participant')->group(function () {
     Route::get('/{sessionKey}/create', function ($sessionKey) {
-        return view('sessions.createparticipant', ['sessionKey' => $sessionKey]);
+        return view('participants.createparticipant', ['sessionKey' => $sessionKey, 'showParticipantJs' => 1]);
     });
 });

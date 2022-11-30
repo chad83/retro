@@ -19,6 +19,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="{{ asset('js/scripts.js') }}" defer></script>
     <?php if (isset($showCreateJs)) { ?><script src="{{ asset('js/SessionCreate.js') }}"></script><?php } ?>
+    <?php if (isset($showParticipantJs)) { ?><script src="{{ asset('js/Participant.js') }}"></script><?php } ?>
 
     <style>
         body {
@@ -27,3 +28,7 @@
     </style>
 </head>
 <body class="antialiased">
+
+<input type="hidden" id="session_key" value="{{ $sessionKey ?? "" }}" />
+<input type="hidden" id="session_state" value="{{ $sessionState ?? "" }}" />
+<input type="hidden" id="participant_key" value="{{ $participantKey ?? "" }}" />

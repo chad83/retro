@@ -31,33 +31,6 @@ jQuery(document).ready(function($){
         });
     });
 
-    $("#create_participant_button").click(function(){
-        let sessionKey = $("#session_name").val();
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        let formData = {
-            name: sessionName
-        };
-
-        $.ajax({
-            type: "POST",
-            url: apiPath + "session/",
-            data: formData,
-            dataType: "json",
-            success: function (data) {
-                applyCreatedSession(data);
-            },
-            error: function (data) {
-                console.log("Error Creating Session");
-            }
-        });
-    });
-
     function applyCreatedSession(session)
     {
         $("#create_participant_section").removeClass("hidden");
@@ -70,11 +43,38 @@ jQuery(document).ready(function($){
         updateReadHiddenInputs();
     }
 
+    $("#launch_session").click(function(){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        let formData = {
+            sessionKey: $("#session_key").val(),
+            state: "filling"
+        };
+
+        $.ajax({
+            type: "POST",
+            url: apiPath + "session/state",
+            data: formData,
+            dataType: "json",
+            success: function (data) {
+                $("#session_state").val("filling");
+                updateReadHiddenInputs();
+            },
+            error: function () {
+                console.log("Error changing session state");
+            }
+        });
+    });
+
     /**
      * Copies the link to the clipboard.
      */
     $("#copy_session_link").click(function(){
-        navigator.clipboard.writeText($("#session_link").html()).then();
+        navigator.clipboard.writeText($("#session_link>a").html()).then();
     });
 
     function createPageHooks()

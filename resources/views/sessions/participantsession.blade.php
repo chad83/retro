@@ -1,8 +1,5 @@
 @include('components.header')
 
-<input type="hidden" id="session_key" value="{{ $sessionKey }}" />
-<input type="hidden" id="participant_key" value="{{ $participantKey }}" />
-
 <div>
     <ul>
         <li>

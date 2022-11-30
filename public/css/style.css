@@ -123,6 +123,11 @@ input[type="button"] {
 /*    width: 100%;*/
 /*}*/
 
+.copy-link {
+    font-size: smaller;
+    cursor: pointer;
+}
+
 .template {
     display: none;
 }

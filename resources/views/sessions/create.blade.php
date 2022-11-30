@@ -3,7 +3,7 @@
 <div class="head-title">Retro</div>
 
 <fieldset class="form-container">
-    <legend>Create a New Form</legend>
+    <legend>Create a New Session</legend>
     <input type="hidden" id="session_key" value="" />
     <div class="two-columns-row">
         <div class="two-columns-cell left"><label for="session_name">Session Name</label></div>
@@ -17,8 +17,8 @@
 <fieldset class="form-container">
     <legend>Launch Session</legend>
     <div class="two-columns-row">
-        <div class="two-columns-cell left">Session Link</div>
-        <div id="session_link" class="two-columns-cell right">[   Not yet created   ]</div>
+        <div class="two-columns-cell left">Session Link <span id="copy_session_link" class="copy-link"><&nbsp;Copy&nbsp;Link&nbsp;></span></div>
+        <div id="session_link" class="two-columns-cell right">[ &nbsp; Not yet created &nbsp; ]</div>
     </div>
     <div class="two-columns-row">
         <div class="two-columns-cell left">Participants</div>

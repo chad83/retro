@@ -70,6 +70,13 @@ jQuery(document).ready(function($){
         updateReadHiddenInputs();
     }
 
+    /**
+     * Copies the link to the clipboard.
+     */
+    $("#copy_session_link").click(function(){
+        navigator.clipboard.writeText($("#session_link").html()).then();
+    });
+
     function createPageHooks()
     {
         setInterval(getParticipants, refreshTimeout);

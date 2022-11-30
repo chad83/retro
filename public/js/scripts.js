@@ -2,6 +2,7 @@ const apiPath = "/api/v1/";
 const refreshTimeout = 5000;
 
 let sessionKey = "";
+let sessionState = "";
 let participantKey = "";
 
 /**
@@ -10,8 +11,67 @@ let participantKey = "";
 function updateReadHiddenInputs()
 {
     sessionKey = $("#session_key").val();
+    sessionState = $("#session_state").val();
     participantKey = $("#participant_key").val();
 }
+
+/**
+ * Gets the state of the current session.
+ */
+function updateSessionState()
+{
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: apiPath + "session/" + sessionKey + "/state",
+        // data: formData,
+        dataType: "json",
+        success: function (data) {
+            sessionState = data.state;
+        },
+        error: function () {
+            console.log("Error getting session state");
+        }
+    });
+}
+
+$("#create_participant_button").click(function(){
+    let sessionKey = $("#session_name").val();
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    let formData = {
+        sessionKey: $("#session_key").val(),
+        name: $("#participant_name").val(),
+        color: $("#participant_color").val(),
+    };
+
+    $.ajax({
+        type: "POST",
+        url: apiPath + "participant/",
+        data: formData,
+        dataType: "json",
+        success: function (participant) {
+            $("#participant_key").val(participant.key);
+            updateReadHiddenInputs();
+
+            $("#create_participant_section").addClass("hidden");
+            $("#session_waiting_fieldset").removeClass("hidden");
+        },
+        error: function (data) {
+            console.log("Error Creating Session");
+        }
+    });
+});
 
 let tempCurrentParticipants = [];
 function getParticipants()

@@ -27,4 +27,14 @@ class ParticipantController extends Controller
 
         return $participant->fresh();
     }
+
+    public function rateSession(Request $request)
+    {
+        $update = Participant::where('key', $request->participant_key)
+            ->update(['session_rating' => $request->session_rating]);
+
+        if ($update === 1) {
+            return \Response::json([], 200);
+        }
+    }
 }

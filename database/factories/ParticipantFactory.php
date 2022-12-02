@@ -19,6 +19,7 @@ class ParticipantFactory extends Factory
         return [
             'key' => fake()->uuid(),
             'name' => fake()->name,
+            'session_rating' =>fake()->numberBetween(1, 5),
             'color' => fake()->hexColor
         ];
     }

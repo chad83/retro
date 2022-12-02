@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ParticipantController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,13 +26,18 @@ Route::prefix('session')->group(function () {
     Route::get('/{sessionKey}/{participantKey}', function ($sessionKey, $participantKey) {
         return view('sessions.participantsession', [
             'sessionKey' => $sessionKey,
-            'participantKey' => $participantKey
+            'participantKey' => $participantKey,
+            'participant' => (new ParticipantController)->find($participantKey)
         ]);
     });
 });
 
 Route::prefix('participant')->group(function () {
     Route::get('/{sessionKey}/create', function ($sessionKey) {
-        return view('participants.createparticipant', ['sessionKey' => $sessionKey, 'showParticipantJs' => 1]);
+        return view('participants.createparticipant',
+            [
+                'sessionKey' => $sessionKey,
+                'showParticipantJs' => 1,
+            ]);
     });
 });

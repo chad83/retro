@@ -1,5 +1,9 @@
 @include('components.header')
 
+<div class="participant-details">
+    <span>{{ $participant->name }}</span>
+</div>
+
 <div>
     <ul>
         <li>
@@ -13,6 +17,12 @@
             <br />
             ie: <span class="vci-code-example">2 it's too noisy at the office</span>
         </li>
+
+        <li>
+            Type <span class="code">rate</span>, space, a rating between 1 and 5 followed by <span class="code">enter</span> to rate the last sprint
+            <br />
+            ie: <span class="vci-code-example">rate 5</span>
+        </li>
     </ul>
 </div>
 
@@ -22,6 +32,11 @@
         <textarea id="vci_input" class="vci-input">#</textarea>
         <textarea id="vci_helper" class="vci-helper" readonly></textarea>
     </div>
+</div>
+
+<div class="current-rating">
+    <span class="title">Your Session Rating:</span>
+    <span id="rating_field" class="value">{{ $participant->session_rating }}</span>
 </div>
 
 <!-- Template to be copied -->

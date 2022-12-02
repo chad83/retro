@@ -38,6 +38,11 @@ Route::prefix('v1')->group(function () {
     Route::prefix('participant')->group(function () {
         Route::post('/', [ParticipantController::class, 'create']);
 
+        /**
+         * Expects: session_rating, participant_key
+         */
+        Route::post('/rate', [ParticipantController::class, 'rateSession']);
+
         Route::get('/{key}', [ParticipantController::class, 'find']);
     });
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('key')->default(DB::raw('(UUID())'));
             $table->unsignedBigInteger('session_id');
+            $table->unsignedSmallInteger('session_rating')->nullable();
             $table->string('name');
             $table->string('color')->nullable();
             $table->timestamps();

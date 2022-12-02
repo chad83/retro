@@ -39,7 +39,7 @@ class PostController extends Controller
             ->join('participants', function ($join) use ($participantKey) {
                 $join->on('participants.id', 'posts.participant_id')->where('participants.key', $participantKey);
             })
-            ->orderByDesc('id')
+            ->orderBy('id')
             ->limit(100)
             ->get();
     }

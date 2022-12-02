@@ -11,7 +11,7 @@ class Participant extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['session_id', 'name', 'color'];
+    protected $fillable = ['session_id', 'name', 'session_rating', 'color'];
 
     protected $hidden = ['id', 'session_id', 'created_at', 'updated_at'];
 

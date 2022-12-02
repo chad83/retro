@@ -23,6 +23,7 @@ This project uses Laravel 9 and needs all of its requirements.
 From the CLI of the Docker container running the server, run:
 - `php artisan migrate`
 - then run `php artisan db:seed`
+- If you need to rollback the last migration, run `php artisan migrate:rollback`
 
 ## Links
 

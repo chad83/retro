@@ -4,7 +4,7 @@ Retro is a retrospective tool in a retro look.
 
 ## Requirements
 
-This project uses Laravel 9 and needs all of its requirements.
+This project uses Laravel 9 and needs all of its requirements. [Larave Requirements](https://laravel.com/docs/9.x/deployment#server-requirements).
 
 ## Running on Windows
 

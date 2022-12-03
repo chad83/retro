@@ -8,6 +8,32 @@ let sessionKey = "";
 let sessionState = "";
 let participantKey = "";
 
+
+/**
+ * Gets the state of the current session.
+ */
+function updateSessionState()
+{
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: apiPath + "session/" + sessionKey + "/state",
+        // data: formData,
+        dataType: "json",
+        success: function (data) {
+            sessionState = data.state;
+        },
+        error: function () {
+            console.log("Error getting session state");
+        }
+    });
+}
+
 jQuery(document).ready(function($){
     let vci = $("#vci_input");
     let vciHelper = $("#vci_helper");
@@ -32,27 +58,30 @@ jQuery(document).ready(function($){
         });
     }
 
-    /**
-     * Gets the state of the current session.
-     */
-    function updateSessionState()
+    function setSessionState(sessionState)
     {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-            }
-        });
+        if(!["created", "ready", "filling", "revealed"].includes(sessionState)) {
+            return false;
+        }
+
+        ajaxSetup();
+
+        let formData = {
+            sessionKey: $("#session_key").val(),
+            state: sessionState
+        };
 
         $.ajax({
-            type: "GET",
-            url: apiPath + "session/" + sessionKey + "/state",
-            // data: formData,
+            type: "POST",
+            url: apiPath + "session/state",
+            data: formData,
             dataType: "json",
             success: function (data) {
-                sessionState = data.state;
+                $("#session_state").val("filling");
+                updateReadHiddenInputs();
             },
             error: function () {
-                console.log("Error getting session state");
+                console.log("Error changing session state");
             }
         });
     }
@@ -315,6 +344,65 @@ jQuery(document).ready(function($){
         return "bad command";
     }
 
+    $("#create_session_button").click(function(){
+        let sessionName = $("#session_name").val();
+
+        if (sessionName.length < 3) {
+            return false;
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        let formData = {
+            name: sessionName
+        };
+
+        $.ajax({
+            type: "POST",
+            url: apiPath + "session/",
+            data: formData,
+            dataType: "json",
+            success: function (data) {
+                applyCreatedSession(data);
+            },
+            error: function (data) {
+                console.log("Error Creating Session");
+            }
+        });
+    });
+
+    function applyCreatedSession(session)
+    {
+        $("#create_participant_section").removeClass("hidden");
+
+        let sessionLink = window.location.origin + "/participant/" + session['key'] + "/create/";
+
+        $("#session_link").html("<a href=\"" + sessionLink + "\">" + sessionLink + "</a>");
+        $("#session_key").val(session['key']);
+
+        updateReadHiddenInputs();
+    }
+
+    $("#launch_session").click(function(){
+        setSessionState("filling");
+    });
+
+    /**
+     * Copies the link to the clipboard.
+     */
+    $("#copy_session_link").click(function(){
+        navigator.clipboard.writeText($("#session_link>a").html()).then();
+    });
+
+    function createPageHooks()
+    {
+        setInterval(getParticipants, refreshTimeout);
+    }
+
     // Makes sure the cursor is always at the end of the CLI view.
     function resetCursorPosition()
     {
@@ -373,6 +461,7 @@ jQuery(document).ready(function($){
         if (illegalCharacters.includes(e.which) && !e.shiftKey) {
             $(this).val(text.substring(0, text.length - 1));
         }
+
     });
 
     vci.keydown(function (e) {
@@ -391,6 +480,20 @@ jQuery(document).ready(function($){
         //         $(this).val(text + "#");
         //     }
         // }
+
+        // Prevent the left-arrow click if the cursor is at the start of the line.
+        if (e.which === 37 && $("#vci_input").prop("selectionStart") - text.lastIndexOf("#") <= 1) {
+            e.preventDefault();
+        }
+        // Prevent the arrow up key.
+        if (e.which === 38) {
+            e.preventDefault();
+        }
+        // On Ctrl+C, skip a line (like in a CLI).
+        if (e.which === 67 && e.ctrlKey) {
+            e.preventDefault();
+            $(this).val(text + "\n");
+        }
     });
 
 
@@ -398,5 +501,8 @@ jQuery(document).ready(function($){
     updateReadHiddenInputs();
     vci.focus();
     getParticipantPosts(); // --TBC-- should it always run?
+
+    // Execute all timed methods.
+    createPageHooks();
 
 });

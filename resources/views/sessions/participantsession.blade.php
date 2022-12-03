@@ -47,6 +47,8 @@
     </div>
 </div>
 
+@include('participants.currentParticipants')
+
 
 @include('components.footer')
 

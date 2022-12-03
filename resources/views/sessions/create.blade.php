@@ -19,16 +19,9 @@
         <div class="two-columns-cell left">Session Link <span id="copy_session_link" class="copy-link"><&nbsp;Copy&nbsp;Link&nbsp;></span></div>
         <div id="session_link" class="two-columns-cell right">[ &nbsp; Not yet created &nbsp; ]</div>
     </div>
-    <div class="two-columns-row">
-        <div class="two-columns-cell left">Participants</div>
-        <div class="two-columns-cell right">
-            <ul id="participants_list"></ul>
-        </div>
-    </div>
     <div class="full-row right"><input type="button" id="launch_session" value="Launch Session"></div>
 </fieldset>
 
+@include('participants.currentParticipants')
+
 @include('components.footer')
-
-
-

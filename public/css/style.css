@@ -138,6 +138,29 @@ input[type="button"] {
 /*    width: 100%;*/
 /*}*/
 
+.results-table {
+    width: 800px;
+    display: table;
+}
+
+.results-table .row {
+    display: table-row;
+}
+
+.results-table .row .cell {
+    width: 50%;
+    display: table-cell;
+}
+
+.results-table .row .cell.header {
+    text-align: center;
+    display: table-cell;
+}
+
+.results-table .row .cell.bordered {
+    border-left: 1px solid #dddddd;
+}
+
 .copy-link {
     font-size: smaller;
     cursor: pointer;

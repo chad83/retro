@@ -9,9 +9,32 @@ use Illuminate\Http\Response;
 
 class SessionController extends Controller
 {
-    public function find(string $key): Session
+    public function find(string $sessionKey): Session
     {
-        return Session::select(['key', 'state'])->where('key', $key)->first();
+        return Session::select(['key', 'state'])->where('key', $sessionKey)->first();
+    }
+
+    public function getSessionDetails(string $sessionKey): Session
+    {
+        $session = Session::with(['participants', 'posts'])
+            ->where('key', $sessionKey)
+            ->first();
+
+        // Calculate the voting data.
+        $totalRating = 0;
+        $numberOfVoters = 0;
+        foreach ($session->participants as $participant) {
+            if (is_numeric($participant->session_rating)) {
+                $totalRating += $participant->session_rating;
+                $numberOfVoters++;
+            }
+        }
+
+        // Add the voting data to the results.
+        $session->numberOfVoters = $numberOfVoters;
+        $session->ratingAverage = round($totalRating / $numberOfVoters, 2);
+
+        return $session;
     }
 
     public function getParticipants(string $key): Session
@@ -21,27 +44,27 @@ class SessionController extends Controller
             ->first();
     }
 
-    public function getPosts(string $key): Collection
+    public function getPosts(string $sessionKey): Collection
     {
         return Session::with('posts')
-            ->where('sessions.key', $key)
+            ->where('sessions.key', $sessionKey)
             ->get();
     }
 
     /**
      * This method should not be exposed and should only be used internally.
      *
-     * @param string $key
+     * @param string $sessionKey
      * @return Session
      */
-    public function getSessionId(string $key): Session
+    public function getSessionId(string $sessionKey): Session
     {
-        return Session::select('id')->where('key', $key)->first();
+        return Session::select('id')->where('key', $sessionKey)->first();
     }
 
-    public function getState(string $key)
+    public function getState(string $sessionKey)
     {
-        return Session::select('state')->where('key', $key)->first();
+        return Session::select('state')->where('key', $sessionKey)->first();
     }
 
     public function create(Request $request)

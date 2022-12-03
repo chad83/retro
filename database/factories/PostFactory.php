@@ -20,7 +20,7 @@ class PostFactory extends Factory
     {
         return [
             'key' => fake()->uuid(),
-            'category' => fake()->randomElement(['went well', 'can be improved']),
+            'category' => fake()->randomElement(['went well', 'to improve']),
             'text' => fake()->text(60),
             'is_starred' => fake()->randomElement([0, 0, 0, 1]),
             'likes' => fake()->numberBetween(0, 6)

@@ -26,6 +26,12 @@
     </ul>
 </div>
 
+<fieldset id="session_revealed_container" class="form-container hidden">
+    <legend>Session Ended</legend>
+    <div class="full-row">This session is now in the "reveal" stage. Click on the button below to go to see the results</div>
+    <div class="full-row right"><input id="go_to_results" type="button" value="View Results"></div>
+</fieldset>
+
 
 <div class="vci_container">
     <div class="vci">

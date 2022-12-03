@@ -22,12 +22,13 @@ Route::get('/', function () {
 Route::prefix('session')->group(function () {
     // Session-creation page.
     Route::get('/create', function () {
-        return view('sessions.create', ['showCreateJs' => 1, 'showParticipantJs' => 1]);
+        return view('sessions.create', ['page' => 'createSession', 'showCreateJs' => 1, 'showParticipantJs' => 1]);
     });
 
     // Results page.
     Route::get('/{sessionKey}/results', function ($sessionKey) {
         return view('sessions.results', [
+            'page' => 'sessionResults',
             'sessionKey' => $sessionKey,
             'session' => (new SessionController)->getSessionDetails($sessionKey)
         ]);
@@ -36,6 +37,7 @@ Route::prefix('session')->group(function () {
     // Participant's filling page.
     Route::get('/{sessionKey}/{participantKey}', function ($sessionKey, $participantKey) {
         return view('sessions.participantsession', [
+            'page' => 'filling',
             'sessionKey' => $sessionKey,
             'participantKey' => $participantKey,
             'participant' => (new ParticipantController)->find($participantKey)

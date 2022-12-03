@@ -48,7 +48,7 @@ $postItColors = ['#ff7eb9', '#7afcff', '#feff9c'];
 
         <div class="cell bordered">
             @foreach($session->posts as $post)
-                @if($post->category === 'can be improved')
+                @if($post->category === 'to improve')
                     <div class="post-it" style="background-color: {{ $postItColors[rand(0, 2)] }}">
                         {{--                        <div class="header">X</div>--}}
                         <div class="text">{{ $post->text }}</div>

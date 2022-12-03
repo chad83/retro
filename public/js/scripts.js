@@ -2,6 +2,7 @@ const apiPath = "/api/v1/";
 const refreshTimeout = 5000;
 let illegalSpecialCharacters = [51]; // #
 let illegalCharacters = []; // Any illegal character that don't require special shift-key event.
+let sessionStates = ["created", "ready", "filling", "revealed"];
 
 
 let sessionKey = "";
@@ -14,19 +15,26 @@ let participantKey = "";
  */
 function updateSessionState()
 {
+    if(sessionKey === "") {
+        return false;
+    }
+
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            "X-CSRF-TOKEN": jQuery('meta[name="csrf-token"]').attr("content")
         }
     });
 
     $.ajax({
         type: "GET",
         url: apiPath + "session/" + sessionKey + "/state",
-        // data: formData,
         dataType: "json",
         success: function (data) {
             sessionState = data.state;
+
+            if (data.state === "revealed") {
+                $("#session_revealed_container").show(800);
+            }
         },
         error: function () {
             console.log("Error getting session state");
@@ -60,7 +68,7 @@ jQuery(document).ready(function($){
 
     function setSessionState(sessionState)
     {
-        if(!["created", "ready", "filling", "revealed"].includes(sessionState)) {
+        if(!sessionStates.includes(sessionState)) {
             return false;
         }
 
@@ -77,7 +85,7 @@ jQuery(document).ready(function($){
             data: formData,
             dataType: "json",
             success: function (data) {
-                $("#session_state").val("filling");
+                $("#session_state").val(sessionState);
                 updateReadHiddenInputs();
             },
             error: function () {
@@ -161,6 +169,8 @@ jQuery(document).ready(function($){
             savePost(category, text);
         } else if(category === "rate") {
             saveRating(text);
+        } else if(category === "session state" && sessionStates.includes(text)) {
+            setSessionState(text);
         }
 
         return false;
@@ -286,64 +296,6 @@ jQuery(document).ready(function($){
         });
     }
 
-    // Get participants
-    $("#btn1").click(function () {
-        setInterval(getParticipants, refreshTimeout);
-    });
-
-    function getTextLine(text)
-    {
-        let textLine = text.substring(text.lastIndexOf("#"));
-        return textLine.trim();
-    }
-
-    /**
-     * Extracts the current command entered by the user.
-     *
-     * @param textLine
-     *
-     * @returns {string}
-     */
-    function getCurrentCommand(textLine)
-    {
-        // Remove the #
-        textLine = textLine.substring(1).trim();
-
-        let commandKey = "";
-        let argument = "";
-
-        // Extract the command.
-        if (textLine.indexOf(" ") > -1) {
-            commandKey = textLine.substring(0, textLine.indexOf(" "));
-        } else {
-            commandKey = textLine;
-        }
-
-        // Extract the argument.
-        if (textLine.indexOf(" ") > -1) {
-            argument = textLine.substring(textLine.indexOf(" ") + 1);
-        }
-
-
-        if (commandKey === "1") {
-            return "went well";
-        } else if (commandKey === "2") {
-            return "to improve";
-        } else if (commandKey === "rate") {
-
-            // Check that the argument given is between 1 and 5.
-            if (argument !== "") {
-                if (!parseInt(argument) || parseInt(argument) > 5) {
-                    return "1 -> 5";
-                }
-            }
-
-            return "rate";
-        }
-
-        return "bad command";
-    }
-
     $("#create_session_button").click(function(){
         let sessionName = $("#session_name").val();
 
@@ -398,9 +350,63 @@ jQuery(document).ready(function($){
         navigator.clipboard.writeText($("#session_link>a").html()).then();
     });
 
-    function createPageHooks()
+    $("#go_to_results").click(function(){
+        window.location.href = "/session/" + sessionKey + "/results";
+    });
+
+    function getTextLine(text)
     {
-        setInterval(getParticipants, refreshTimeout);
+        let textLine = text.substring(text.lastIndexOf("#"));
+        return textLine.trim();
+    }
+
+    /**
+     * Extracts the current command entered by the user.
+     *
+     * @param textLine
+     *
+     * @returns {string}
+     */
+    function getCurrentCommand(textLine)
+    {
+        // Remove the #
+        textLine = textLine.substring(1).trim();
+
+        let commandKey = "";
+        let argument = "";
+
+        // Extract the command.
+        if (textLine.indexOf(" ") > -1) {
+            commandKey = textLine.substring(0, textLine.indexOf(" "));
+        } else {
+            commandKey = textLine;
+        }
+
+        // Extract the argument.
+        if (textLine.indexOf(" ") > -1) {
+            argument = textLine.substring(textLine.indexOf(" ") + 1);
+        }
+
+
+        if (commandKey === "1") {
+            return "went well";
+        } else if (commandKey === "2") {
+            return "to improve";
+        } else if (commandKey === "rate") {
+
+            // Check that the argument given is between 1 and 5.
+            if (argument !== "") {
+                if (!parseInt(argument) || parseInt(argument) > 5) {
+                    return "1 -> 5";
+                }
+            }
+
+            return "rate";
+        } else if (commandKey === "session") {
+            return "session state";
+        }
+
+        return "bad command";
     }
 
     // Makes sure the cursor is always at the end of the CLI view.
@@ -496,7 +502,17 @@ jQuery(document).ready(function($){
         }
     });
 
+    function createPageHooks()
+    {
+        let currentPage = $("#page").val();
 
+        if(currentPage === "createSession" || currentPage === "filling") {
+            setInterval(function () {
+                getParticipants();
+                updateSessionState();
+            }, refreshTimeout);
+        }
+    }
 
     updateReadHiddenInputs();
     vci.focus();

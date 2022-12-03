@@ -32,3 +32,4 @@
 <input type="hidden" id="session_key" value="{{ $sessionKey ?? "" }}" />
 <input type="hidden" id="session_state" value="{{ $sessionState ?? "" }}" />
 <input type="hidden" id="participant_key" value="{{ $participantKey ?? "" }}" />
+<input type="hidden" id="page" value="{{ $page ?? "" }}" />

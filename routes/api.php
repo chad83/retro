@@ -29,6 +29,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/state', [SessionController::class, 'setState']);
 
         Route::get('/{key}', [SessionController::class, 'find']);
+        Route::get('/{key}/details', [SessionController::class, 'getSessionDetails']);
         Route::get('/{key}/participants', [SessionController::class, 'getParticipants']);
         Route::get('/{key}/posts', [SessionController::class, 'getPosts']);
         Route::get('/{key}/state', [SessionController::class, 'getState']);

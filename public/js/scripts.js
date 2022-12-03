@@ -2,11 +2,45 @@ const apiPath = "/api/v1/";
 const refreshTimeout = 5000;
 let illegalSpecialCharacters = [51]; // #
 let illegalCharacters = []; // Any illegal character that don't require special shift-key event.
+let sessionStates = ["created", "ready", "filling", "revealed"];
 
 
 let sessionKey = "";
 let sessionState = "";
 let participantKey = "";
+
+
+/**
+ * Gets the state of the current session.
+ */
+function updateSessionState()
+{
+    if(sessionKey === "") {
+        return false;
+    }
+
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": jQuery('meta[name="csrf-token"]').attr("content")
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: apiPath + "session/" + sessionKey + "/state",
+        dataType: "json",
+        success: function (data) {
+            sessionState = data.state;
+
+            if (data.state === "revealed") {
+                $("#session_revealed_container").show(800);
+            }
+        },
+        error: function () {
+            console.log("Error getting session state");
+        }
+    });
+}
 
 jQuery(document).ready(function($){
     let vci = $("#vci_input");
@@ -32,27 +66,30 @@ jQuery(document).ready(function($){
         });
     }
 
-    /**
-     * Gets the state of the current session.
-     */
-    function updateSessionState()
+    function setSessionState(sessionState)
     {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-            }
-        });
+        if(!sessionStates.includes(sessionState)) {
+            return false;
+        }
+
+        ajaxSetup();
+
+        let formData = {
+            sessionKey: $("#session_key").val(),
+            state: sessionState
+        };
 
         $.ajax({
-            type: "GET",
-            url: apiPath + "session/" + sessionKey + "/state",
-            // data: formData,
+            type: "POST",
+            url: apiPath + "session/state",
+            data: formData,
             dataType: "json",
             success: function (data) {
-                sessionState = data.state;
+                $("#session_state").val(sessionState);
+                updateReadHiddenInputs();
             },
             error: function () {
-                console.log("Error getting session state");
+                console.log("Error changing session state");
             }
         });
     }
@@ -132,6 +169,8 @@ jQuery(document).ready(function($){
             savePost(category, text);
         } else if(category === "rate") {
             saveRating(text);
+        } else if(category === "session state" && sessionStates.includes(text)) {
+            setSessionState(text);
         }
 
         return false;
@@ -257,9 +296,62 @@ jQuery(document).ready(function($){
         });
     }
 
-    // Get participants
-    $("#btn1").click(function () {
-        setInterval(getParticipants, refreshTimeout);
+    $("#create_session_button").click(function(){
+        let sessionName = $("#session_name").val();
+
+        if (sessionName.length < 3) {
+            return false;
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        let formData = {
+            name: sessionName
+        };
+
+        $.ajax({
+            type: "POST",
+            url: apiPath + "session/",
+            data: formData,
+            dataType: "json",
+            success: function (data) {
+                applyCreatedSession(data);
+            },
+            error: function (data) {
+                console.log("Error Creating Session");
+            }
+        });
+    });
+
+    function applyCreatedSession(session)
+    {
+        $("#create_participant_section").removeClass("hidden");
+
+        let sessionLink = window.location.origin + "/participant/" + session['key'] + "/create/";
+
+        $("#session_link").html("<a href=\"" + sessionLink + "\">" + sessionLink + "</a>");
+        $("#session_key").val(session['key']);
+
+        updateReadHiddenInputs();
+    }
+
+    $("#launch_session").click(function(){
+        setSessionState("filling");
+    });
+
+    /**
+     * Copies the link to the clipboard.
+     */
+    $("#copy_session_link").click(function(){
+        navigator.clipboard.writeText($("#session_link>a").html()).then();
+    });
+
+    $("#go_to_results").click(function(){
+        window.location.href = "/session/" + sessionKey + "/results";
     });
 
     function getTextLine(text)
@@ -310,6 +402,8 @@ jQuery(document).ready(function($){
             }
 
             return "rate";
+        } else if (commandKey === "session") {
+            return "session state";
         }
 
         return "bad command";
@@ -373,6 +467,7 @@ jQuery(document).ready(function($){
         if (illegalCharacters.includes(e.which) && !e.shiftKey) {
             $(this).val(text.substring(0, text.length - 1));
         }
+
     });
 
     vci.keydown(function (e) {
@@ -391,12 +486,39 @@ jQuery(document).ready(function($){
         //         $(this).val(text + "#");
         //     }
         // }
+
+        // Prevent the left-arrow click if the cursor is at the start of the line.
+        if (e.which === 37 && $("#vci_input").prop("selectionStart") - text.lastIndexOf("#") <= 1) {
+            e.preventDefault();
+        }
+        // Prevent the arrow up key.
+        if (e.which === 38) {
+            e.preventDefault();
+        }
+        // On Ctrl+C, skip a line (like in a CLI).
+        if (e.which === 67 && e.ctrlKey) {
+            e.preventDefault();
+            $(this).val(text + "\n");
+        }
     });
 
+    function createPageHooks()
+    {
+        let currentPage = $("#page").val();
 
+        if(currentPage === "createSession" || currentPage === "filling") {
+            setInterval(function () {
+                getParticipants();
+                updateSessionState();
+            }, refreshTimeout);
+        }
+    }
 
     updateReadHiddenInputs();
     vci.focus();
     getParticipantPosts(); // --TBC-- should it always run?
+
+    // Execute all timed methods.
+    createPageHooks();
 
 });

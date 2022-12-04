@@ -29,6 +29,7 @@ From the CLI of the Docker container running the server, run:
 
 - [Jira Board](https://chadiw.atlassian.net/jira/software/projects/RET/boards/2)
 - [GitHub Repository](https://github.com/chad83/retro) (This Page :P)
+- [Laravel Deployment](https://laravel.com/docs/9.x/deployment#server-requirements)
 
 ## License
 

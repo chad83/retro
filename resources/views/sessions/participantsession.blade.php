@@ -23,6 +23,12 @@
             <br />
             ie: <span class="vci-code-example">rate 5</span>
         </li>
+
+        <li>
+            Type <span class="code">session revealed</span> followed by <span class="code">enter</span> to unlock the results page.
+            <br />
+            ie: <span class="vci-code-example">session revealed</span>
+        </li>
     </ul>
 </div>
 

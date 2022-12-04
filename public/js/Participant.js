@@ -23,12 +23,6 @@ $(document).ready(function($){
 
     function rateSession()
     {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         let formData = {
             participant_key: $("#participant_key").val(),
             session_rating: $("#session_rating").val()

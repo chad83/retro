@@ -22,6 +22,6 @@
     <div class="full-row right"><input type="button" id="launch_session" value="Launch Session"></div>
 </fieldset>
 
-@include('participants.currentParticipants')
+@include('participants.currentparticipants')
 
 @include('components.footer')

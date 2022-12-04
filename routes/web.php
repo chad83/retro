@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('sessions.create', ['showCreateJs' => 1, 'showParticipantJs' => 1]);
+//    return view('welcome');
+    return view('sessions.create', ['page' => 'createSession', 'showCreateJs' => 1, 'showParticipantJs' => 1]);
 });
 
 Route::prefix('session')->group(function () {

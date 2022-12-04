@@ -53,7 +53,7 @@
     </div>
 </div>
 
-@include('participants.currentParticipants')
+@include('participants.currentparticipants')
 
 
 @include('components.footer')

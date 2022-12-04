@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
 
     <!-- Scripts -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="{{ asset('js/scripts.js') }}" defer></script>
     <?php if (isset($showCreateJs)) { ?><script src="{{ asset('js/SessionCreate.js') }}"></script><?php } ?>

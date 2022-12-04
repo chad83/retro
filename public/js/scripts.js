@@ -1,5 +1,5 @@
-const apiPath = "/api/v1/";
-const refreshTimeout = 5000;
+const apiPath = "http://165.227.155.99:8080/api/v1/";
+const refreshTimeout = 7000;
 let illegalSpecialCharacters = [51]; // #
 let illegalCharacters = []; // Any illegal character that don't require special shift-key event.
 let sessionStates = ["created", "ready", "filling", "revealed"];
@@ -18,12 +18,6 @@ function updateSessionState()
     if(sessionKey === "") {
         return false;
     }
-
-    $.ajaxSetup({
-        headers: {
-            "X-CSRF-TOKEN": jQuery('meta[name="csrf-token"]').attr("content")
-        }
-    });
 
     $.ajax({
         type: "GET",
@@ -57,22 +51,11 @@ jQuery(document).ready(function($){
         participantKey = $("#participant_key").val();
     }
 
-    function ajaxSetup()
-    {
-        $.ajaxSetup({
-            headers: {
-                "X-CSRF-TOKEN": jQuery('meta[name="csrf-token"]').attr("content")
-            }
-        });
-    }
-
     function setSessionState(sessionState)
     {
         if(!sessionStates.includes(sessionState)) {
             return false;
         }
-
-        ajaxSetup();
 
         let formData = {
             sessionKey: $("#session_key").val(),
@@ -97,12 +80,6 @@ jQuery(document).ready(function($){
     $("#create_participant_button").click(function(){
         let sessionKey = $("#session_name").val();
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         let formData = {
             sessionKey: $("#session_key").val(),
             name: $("#participant_name").val(),
@@ -111,7 +88,7 @@ jQuery(document).ready(function($){
 
         $.ajax({
             type: "POST",
-            url: apiPath + "participant/",
+            url: apiPath + "participant",
             data: formData,
             dataType: "json",
             success: function (participant) {
@@ -122,7 +99,7 @@ jQuery(document).ready(function($){
                 $("#session_waiting_fieldset").removeClass("hidden");
             },
             error: function (data) {
-                console.log("Error Creating Session");
+                console.log("Error Creating Participant");
             }
         });
     });
@@ -133,12 +110,6 @@ jQuery(document).ready(function($){
         if(sessionKey === "") {
             return false;
         }
-
-        $.ajaxSetup({
-            headers: {
-                "X-CSRF-TOKEN": jQuery('meta[name="csrf-token"]').attr('content')
-            }
-        });
 
         $.ajax({
             type: "GET",
@@ -178,12 +149,6 @@ jQuery(document).ready(function($){
 
     function savePost(category, text)
     {
-        $.ajaxSetup({
-            headers: {
-                "X-CSRF-TOKEN": jQuery('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        // e.preventDefault();
         let formData = {
             sessionKey: $("#session_key").val(),
             participantKey: $("#participant_key").val(),
@@ -193,7 +158,7 @@ jQuery(document).ready(function($){
 
         $.ajax({
             type: "POST",
-            url: apiPath + "post/",
+            url: apiPath + "post",
             data: formData,
             dataType: "json",
             success: function (data) {
@@ -218,8 +183,6 @@ jQuery(document).ready(function($){
         if (rating < 0 || rating > 5) {
             return false;
         }
-
-        ajaxSetup();
 
         let formData = {
             participant_key: $("#participant_key").val(),
@@ -272,12 +235,6 @@ jQuery(document).ready(function($){
             return false;
         }
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         $.ajax({
             type: "GET",
             url: apiPath + "post/getparticipantposts/" + sessionKey + "/" + participantKey,
@@ -303,19 +260,13 @@ jQuery(document).ready(function($){
             return false;
         }
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         let formData = {
             name: sessionName
         };
 
         $.ajax({
             type: "POST",
-            url: apiPath + "session/",
+            url: apiPath + "session",
             data: formData,
             dataType: "json",
             success: function (data) {
